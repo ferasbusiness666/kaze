@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- eye with a slash = private browsing -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp" android:height="24dp" android:viewportWidth="24" android:viewportHeight="24">
+    <path android:strokeColor="#000000" android:strokeWidth="2" android:strokeLineCap="round" android:strokeLineJoin="round"
+        android:fillColor="#00000000" android:pathData="M2,12 S5.5,5 12,5 S22,12 22,12" />
+    <path android:strokeColor="#000000" android:strokeWidth="2" android:strokeLineCap="round" android:strokeLineJoin="round"
+        android:fillColor="#00000000" android:pathData="M3,3 L21,21" />
+    <path android:strokeColor="#000000" android:strokeWidth="2" android:strokeLineCap="round" android:strokeLineJoin="round"
+        android:fillColor="#00000000" android:pathData="M15,12 A3,3 0 1 0 9,12 A3,3 0 1 0 15,12" />
+</vector>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Splash/window background for light mode (matches design light bg). -->
+    <color name="window_bg">#FFFFFF</color>
+    <!-- Adaptive launcher icon background: white, so the navy logo reads cleanly. -->
+    <color name="ic_launcher_background">#FFFFFF</color>
+</resources>

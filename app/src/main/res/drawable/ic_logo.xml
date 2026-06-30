@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- In-app "kaze" wind mark. Ink is #000000 so Compose can tint it per theme. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="100dp" android:height="100dp"
+    android:viewportWidth="100" android:viewportHeight="100">
+    <path android:strokeColor="#000000" android:strokeWidth="6" android:strokeLineCap="round"
+        android:fillColor="#00000000" android:pathData="M90,50 A40,40 0 1 0 10,50 A40,40 0 1 0 90,50" />
+    <path android:strokeColor="#000000" android:strokeWidth="6" android:strokeLineCap="round"
+        android:fillColor="#00000000" android:pathData="M28,60 Q50,40 80,50" />
+    <path android:strokeColor="#000000" android:strokeWidth="6" android:strokeLineCap="round"
+        android:fillColor="#00000000" android:pathData="M33,70 Q52,56 74,62" />
+</vector>

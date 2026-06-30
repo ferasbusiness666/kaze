@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Compose-only app: we don't pull in the Material Components (View) library, so the
+         XML theme just needs to be NoActionBar and let us paint the splash window. The real
+         UI theming lives in KazeTheme. window_bg has a -night variant for the dark splash. -->
+    <style name="Theme.Kaze" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">@color/window_bg</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+    </style>
+</resources>

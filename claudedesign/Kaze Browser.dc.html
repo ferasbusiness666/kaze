@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *{ -webkit-tap-highlight-color:transparent; }
+  body{ margin:0; }
+  @keyframes kzspin{ to{ transform:rotate(360deg); } }
+  @keyframes kztoast{ from{ opacity:0; transform:translate(-50%,8px);} to{opacity:1; transform:translate(-50%,0);} }
+  @keyframes kzmenu{ from{ opacity:0; transform:translateY(-6px) scale(.98);} to{opacity:1; transform:translateY(0) scale(1);} }
+  .kz-scroll::-webkit-scrollbar{ width:0; height:0; }
+</style>
+</helmet>
+
+<div style="min-height:{{ stageMinH }}; background:{{ stageBg }}; display:flex; flex-direction:column; align-items:center; gap:{{ stageGap }}; padding:{{ stagePad }}; font-family:Roboto, system-ui, sans-serif; box-sizing:border-box;">
+
+  <sc-if value="{{ showChrome }}" hint-placeholder-val="{{ true }}">
+  <!-- reviewer chrome: brand + theme switch -->
+  <div style="width:384px; display:flex; align-items:center; justify-content:space-between;">
+    <div style="display:flex; align-items:center; gap:10px;">
+      <div style="width:26px; height:26px; color:#0D1B2A;">
+        <svg viewBox="0 0 100 100" width="26" height="26" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round"><circle cx="50" cy="50" r="40"/><path d="M28 60 Q50 40 80 50"/><path d="M33 70 Q52 56 74 62"/></svg>
+      </div>
+      <span style="font-size:19px; font-weight:500; letter-spacing:-0.4px; color:#0D1B2A;">kaze</span>
+    </div>
+    <div style="display:flex; padding:3px; background:#DCDFE4; border-radius:9px; gap:2px;">
+      <sc-for list="{{ modes }}" as="m" hint-placeholder-count="3">
+        <button onClick="{{ m.onClick }}" style="border:none; cursor:pointer; font-family:inherit; font-size:12.5px; font-weight:500; padding:6px 13px; border-radius:7px; background:{{ m.bg }}; color:{{ m.fg }};">{{ m.label }}</button>
+      </sc-for>
+    </div>
+  </div>
+  </sc-if>
+
+  <!-- PHONE -->
+  <div style="position:relative; width:384px; height:792px; border-radius:46px; background:var(--kz-bg,#fff); border:11px solid #0E1217; overflow:hidden; display:flex; flex-direction:column; box-shadow:0 1px 0 rgba(255,255,255,.04) inset; --kz-bg:{{ t.bg }}; --kz-surface:{{ t.surface }}; --kz-surface2:{{ t.surface2 }}; --kz-fg:{{ t.fg }}; --kz-muted:{{ t.muted }}; --kz-faint:{{ t.faint }}; --kz-border:{{ t.border }}; --kz-accent:{{ t.accent }}; --kz-accentfg:{{ t.accentFg }}; --kz-chrome:{{ t.chrome }}; --kz-sb:{{ t.statusText }}; --kz-track:{{ t.track }};">
+
+    <!-- status bar -->
+    <div style="height:34px; flex:none; display:flex; align-items:center; justify-content:space-between; padding:0 22px; background:var(--kz-chrome,#fff);">
+      <span style="font-size:13px; font-weight:500; color:var(--kz-sb,#0D1B2A); letter-spacing:.2px;">9:30</span>
+      <div style="display:flex; align-items:center; gap:6px; color:var(--kz-sb,#0D1B2A);">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor"><path d="M8 13.3L.67 5.97a10.37 10.37 0 0114.66 0L8 13.3z"/></svg>
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor"><path d="M14.67 14.67V1.33L1.33 14.67h13.34z"/></svg>
+        <svg width="16" height="15" viewBox="0 0 16 16" fill="currentColor"><rect x="3.5" y="2" width="9" height="13" rx="1.5"/><rect x="5.5" y=".8" width="5" height="2" rx=".5"/></svg>
+      </div>
+    </div>
+
+    <!-- private banner -->
+    <sc-if value="{{ isPrivate }}" hint-placeholder-val="{{ false }}">
+      <div style="flex:none; display:flex; align-items:center; justify-content:center; gap:7px; padding:6px 0; background:var(--kz-surface,#221A33); border-bottom:1px solid var(--kz-border,#352A4C);">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--kz-accent,#9D7CE8)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7"/><path d="M3 3l18 18"/><circle cx="12" cy="12" r="3"/></svg>
+        <span style="font-size:12px; font-weight:500; color:var(--kz-accent,#9D7CE8); letter-spacing:.2px;">Private browsing</span>
+      </div>
+    </sc-if>
+
+    <!-- ============ TOP CHROME ============ -->
+    <!-- HOME toolbar -->
+    <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+      <div style="flex:none; display:flex; align-items:center; gap:8px; padding:8px 12px 10px; background:var(--kz-chrome,#fff);">
+        <button onClick="{{ toggleEnginePopover }}" style="flex:none; width:38px; height:38px; border:none; border-radius:11px; background:{{ engineCur.color }}; color:#fff; font-weight:700; font-size:15px; cursor:pointer; display:flex; align-items:center; justify-content:center;">{{ engineCur.letter }}</button>
+        <div style="flex:1; min-width:0; height:38px; display:flex; align-items:center; gap:8px; padding:0 14px; border-radius:11px; background:var(--kz-surface,#F4F5F7);">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--kz-faint,#98A1AE)" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+          <span style="flex:1; min-width:0; font-size:14px; color:var(--kz-faint,#98A1AE); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Search or type URL</span>
+        </div>
+        <button onClick="{{ goTabs }}" style="flex:none; width:38px; height:38px; border:none; background:transparent; cursor:pointer; display:flex; align-items:center; justify-content:center; position:relative;">
+          <div style="width:24px; height:24px; border:2px solid var(--kz-fg,#0D1B2A); border-radius:7px; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:var(--kz-fg,#0D1B2A);">{{ tabCount }}</div>
+        </button>
+        <button onClick="{{ openMenu }}" style="flex:none; width:34px; height:38px; border:none; background:transparent; cursor:pointer; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3.5px;">
+          <span style="width:4px; height:4px; border-radius:50%; background:var(--kz-fg,#0D1B2A);"></span>
+          <span style="width:4px; height:4px; border-radius:50%; background:var(--kz-fg,#0D1B2A);"></span>
+          <span style="width:4px; height:4px; border-radius:50%; background:var(--kz-fg,#0D1B2A);"></span>
+        </button>
+      </div>
+    </sc-if>
+
+    <!-- SUB-SCREEN app bar -->
+    <sc-if value="{{ isSub }}" hint-placeholder-val="{{ false }}">
+      <div style="flex:none; display:flex; align-items:center; gap:6px; padding:8px 8px 10px 6px; background:var(--kz-chrome,#fff);">
+        <button onClick="{{ goHome }}" style="flex:none; width:44px; height:44px; border:none; background:transparent; cursor:pointer; display:flex; align-items:center; justify-content:center;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--kz-fg,#0D1B2A)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+        </button>
+        <span style="flex:1; font-size:20px; font-weight:500; color:var(--kz-fg,#0D1B2A); letter-spacing:-0.2px;">{{ subTitle }}</span>
+      </div>
+    </sc-if>
+
+    <!-- ============ BODY ============ -->
+    <div class="kz-scroll" style="flex:1; min-height:0; overflow-y:auto; background:var(--kz-bg,#fff); position:relative;">
+
+      <!-- HOME / start page -->
+      <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+        <div data-screen-label="Main" style="min-height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:40px 28px 80px; box-sizing:border-box;">
+          <div style="color:var(--kz-fg,#0D1B2A); opacity:.92;">
+            <svg viewBox="0 0 100 100" width="58" height="58" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round"><circle cx="50" cy="50" r="40"/><path d="M28 60 Q50 40 80 50"/><path d="M33 70 Q52 56 74 62"/></svg>
+          </div>
+          <div style="margin-top:16px; font-size:30px; font-weight:300; letter-spacing:1px; color:var(--kz-fg,#0D1B2A);">kaze</div>
+          <div style="margin-top:40px; width:100%; display:grid; grid-template-columns:repeat(4,1fr); gap:14px;">
+            <sc-for list="{{ shortcuts }}" as="s" hint-placeholder-count="4">
+              <div style="display:flex; flex-direction:column; align-items:center; gap:7px;">
+                <div style="width:50px; height:50px; border-radius:16px; background:{{ s.color }}; color:#fff; display:flex; align-items:center; justify-content:center; font-size:19px; font-weight:500;">{{ s.letter }}</div>
+                <span style="font-size:11px; color:var(--kz-muted,#5C6675); max-width:62px; text-align:center; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ s.label }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- TABS -->
+      <sc-if value="{{ isTabs }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Tab switcher" style="padding:14px 14px 120px;">
+          <sc-if value="{{ hasTabs }}" hint-placeholder-val="{{ true }}">
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+              <sc-for list="{{ tabs }}" as="tab" hint-placeholder-count="3">
+                <div onClick="{{ tab.onOpen }}" style="cursor:pointer; border-radius:16px; overflow:hidden; background:var(--kz-surface,#F4F5F7); border:1px solid var(--kz-border,#E6E8EC);">
+                  <div style="display:flex; align-items:center; gap:7px; padding:9px 9px 8px;">
+                    <div style="flex:none; width:18px; height:18px; border-radius:5px; background:{{ tab.color }}; color:#fff; font-size:10px; font-weight:700; display:flex; align-items:center; justify-content:center;">{{ tab.fav }}</div>
+                    <span style="flex:1; min-width:0; font-size:11.5px; font-weight:500; color:var(--kz-fg,#0D1B2A); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ tab.title }}</span>
+                    <button onClick="{{ tab.onClose }}" style="flex:none; width:18px; height:18px; border:none; border-radius:50%; background:var(--kz-surface2,#E9EBEF); cursor:pointer; display:flex; align-items:center; justify-content:center; padding:0;">
+                      <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="var(--kz-muted,#5C6675)" stroke-width="3" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                    </button>
+                  </div>
+                  <div style="height:118px; background:var(--kz-bg,#fff); border-top:1px solid var(--kz-border,#E6E8EC); padding:12px 12px; display:flex; flex-direction:column; gap:7px;">
+                    <div style="width:70%; height:8px; border-radius:4px; background:var(--kz-surface2,#E9EBEF);"></div>
+                    <div style="width:100%; height:6px; border-radius:3px; background:var(--kz-surface2,#E9EBEF);"></div>
+                    <div style="width:90%; height:6px; border-radius:3px; background:var(--kz-surface2,#E9EBEF);"></div>
+                    <div style="width:60%; height:6px; border-radius:3px; background:var(--kz-surface2,#E9EBEF);"></div>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+          <sc-if value="{{ noTabs }}" hint-placeholder-val="{{ false }}">
+            <div style="padding:80px 20px; text-align:center; color:var(--kz-faint,#98A1AE); font-size:14px;">No open tabs</div>
+          </sc-if>
+        </div>
+      </sc-if>
+
+      <!-- SETTINGS -->
+      <sc-if value="{{ isSettings }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Settings" style="padding:6px 0 40px;">
+          <div style="padding:14px 20px 6px; font-size:12px; font-weight:700; letter-spacing:.6px; text-transform:uppercase; color:var(--kz-accent,#0D1B2A);">Search engine</div>
+          <sc-for list="{{ engines }}" as="e" hint-placeholder-count="4">
+            <button onClick="{{ e.onSelect }}" style="width:100%; border:none; background:transparent; cursor:pointer; display:flex; align-items:center; gap:14px; padding:13px 20px; font-family:inherit;">
+              <div style="flex:none; width:34px; height:34px; border-radius:9px; background:{{ e.color }}; color:#fff; font-weight:700; font-size:14px; display:flex; align-items:center; justify-content:center;">{{ e.letter }}</div>
+              <span style="flex:1; text-align:left; font-size:15px; color:var(--kz-fg,#0D1B2A);">{{ e.name }}</span>
+              <div style="flex:none; width:21px; height:21px; border-radius:50%; border:2px solid {{ e.ringColor }}; display:flex; align-items:center; justify-content:center;">
+                <div style="width:11px; height:11px; border-radius:50%; background:{{ e.dotColor }};"></div>
+              </div>
+            </button>
+          </sc-for>
+
+          <div style="height:1px; background:var(--kz-border,#E6E8EC); margin:10px 20px;"></div>
+          <div style="padding:8px 20px 6px; font-size:12px; font-weight:700; letter-spacing:.6px; text-transform:uppercase; color:var(--kz-accent,#0D1B2A);">Preferences</div>
+
+          <div style="display:flex; align-items:center; gap:14px; padding:14px 20px;">
+            <div style="flex:1;">
+              <div style="font-size:15px; color:var(--kz-fg,#0D1B2A);">Ad blocker</div>
+              <div style="font-size:12.5px; color:var(--kz-muted,#5C6675); margin-top:2px;">Block ads &amp; trackers</div>
+            </div>
+            <button onClick="{{ toggleAdblock }}" style="flex:none; width:46px; height:27px; border:none; border-radius:14px; cursor:pointer; padding:0; position:relative; background:{{ adblockTrack }};">
+              <span style="position:absolute; top:3px; left:{{ adblockX }}; width:21px; height:21px; border-radius:50%; background:#fff;"></span>
+            </button>
+          </div>
+
+          <div style="display:flex; align-items:center; gap:14px; padding:14px 20px;">
+            <div style="flex:1;">
+              <div style="font-size:15px; color:var(--kz-fg,#0D1B2A);">Dark mode</div>
+              <div style="font-size:12.5px; color:var(--kz-muted,#5C6675); margin-top:2px;">Use dark theme</div>
+            </div>
+            <button onClick="{{ toggleDark }}" style="flex:none; width:46px; height:27px; border:none; border-radius:14px; cursor:pointer; padding:0; position:relative; background:{{ darkTrack }};">
+              <span style="position:absolute; top:3px; left:{{ darkX }}; width:21px; height:21px; border-radius:50%; background:#fff;"></span>
+            </button>
+          </div>
+
+          <div style="height:1px; background:var(--kz-border,#E6E8EC); margin:10px 20px;"></div>
+          <button onClick="{{ clearHistory }}" style="width:100%; border:none; background:transparent; cursor:pointer; display:flex; align-items:center; gap:14px; padding:15px 20px; font-family:inherit;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#D64545" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6"/></svg>
+            <span style="flex:1; text-align:left; font-size:15px; color:#D64545;">Clear browsing history</span>
+          </button>
+        </div>
+      </sc-if>
+
+      <!-- HISTORY -->
+      <sc-if value="{{ isHistory }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="History" style="padding:4px 0 40px;">
+          <sc-for list="{{ historyGroups }}" as="group" hint-placeholder-count="2">
+            <div style="padding:16px 20px 6px; font-size:12px; font-weight:700; letter-spacing:.5px; color:var(--kz-muted,#5C6675);">{{ group.label }}</div>
+            <sc-for list="{{ group.items }}" as="item" hint-placeholder-count="3">
+              <div style="position:relative; overflow:hidden;">
+                <div style="position:absolute; inset:0; background:#D64545; display:flex; align-items:center; justify-content:flex-end; padding-right:24px;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6"/></svg>
+                </div>
+                <div onPointerDown="{{ item.onDown }}" onPointerMove="{{ item.onMove }}" onPointerUp="{{ item.onUp }}" onPointerCancel="{{ item.onUp }}" style="position:relative; display:flex; align-items:center; gap:13px; padding:11px 20px; background:var(--kz-bg,#fff); touch-action:pan-y; cursor:grab;">
+                  <div style="flex:none; width:30px; height:30px; border-radius:8px; background:{{ item.color }}; color:#fff; font-size:13px; font-weight:700; display:flex; align-items:center; justify-content:center;">{{ item.fav }}</div>
+                  <div style="flex:1; min-width:0;">
+                    <div style="font-size:14px; color:var(--kz-fg,#0D1B2A); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ item.title }}</div>
+                    <div style="font-size:12px; color:var(--kz-faint,#98A1AE); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-family:'Roboto Mono', monospace;">{{ item.url }}</div>
+                  </div>
+                </div>
+              </div>
+            </sc-for>
+          </sc-for>
+          <div style="padding:18px 20px 0; text-align:center; font-size:11.5px; color:var(--kz-faint,#98A1AE);">Swipe a row left to delete</div>
+        </div>
+      </sc-if>
+
+      <!-- DOWNLOADS -->
+      <sc-if value="{{ isDownloads }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Downloads" style="padding:8px 0 40px;">
+          <sc-for list="{{ downloads }}" as="d" hint-placeholder-count="5">
+            <div style="display:flex; align-items:center; gap:14px; padding:13px 20px;">
+              <div style="flex:none; width:40px; height:40px; border-radius:10px; background:{{ d.color }}; color:#fff; font-size:11px; font-weight:700; letter-spacing:.5px; display:flex; align-items:center; justify-content:center;">{{ d.ext }}</div>
+              <div style="flex:1; min-width:0;">
+                <div style="font-size:14px; color:var(--kz-fg,#0D1B2A); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ d.name }}</div>
+                <div style="font-size:12px; color:var(--kz-muted,#5C6675); margin-top:2px;">{{ d.meta }}</div>
+              </div>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--kz-faint,#98A1AE)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14"/></svg>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+
+    </div>
+
+    <!-- ============ BOTTOM NAV (home only) ============ -->
+    <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+      <div style="flex:none; display:flex; align-items:center; justify-content:space-around; padding:8px 24px 6px; background:var(--kz-chrome,#fff); border-top:1px solid var(--kz-border,#E6E8EC);">
+        <button onClick="{{ navBack }}" style="width:48px; height:44px; border:none; background:transparent; display:flex; align-items:center; justify-content:center;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--kz-faint,#98A1AE)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <button onClick="{{ navFwd }}" style="width:48px; height:44px; border:none; background:transparent; display:flex; align-items:center; justify-content:center;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--kz-faint,#98A1AE)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+        <button onClick="{{ goHome }}" style="width:48px; height:44px; border:none; background:transparent; cursor:pointer; display:flex; align-items:center; justify-content:center;">
+          <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="var(--kz-fg,#0D1B2A)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>
+        </button>
+        <button onClick="{{ refresh }}" style="width:48px; height:44px; border:none; background:transparent; cursor:pointer; display:flex; align-items:center; justify-content:center;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--kz-fg,#0D1B2A)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="animation:{{ refreshAnim }};"><path d="M21 12a9 9 0 11-2.64-6.36"/><path d="M21 3v6h-6"/></svg>
+        </button>
+      </div>
+    </sc-if>
+
+    <!-- gesture pill -->
+    <div style="flex:none; height:22px; display:flex; align-items:center; justify-content:center; background:var(--kz-chrome,#fff);">
+      <div style="width:110px; height:4px; border-radius:2px; background:var(--kz-fg,#0D1B2A); opacity:.32;"></div>
+    </div>
+
+    <!-- ============ OVERLAYS ============ -->
+    <!-- engine popover -->
+    <sc-if value="{{ enginePopover }}" hint-placeholder-val="{{ false }}">
+      <div onClick="{{ closeEnginePopover }}" style="position:absolute; inset:0; z-index:30;"></div>
+      <div style="position:absolute; z-index:31; left:12px; top:84px; width:220px; background:var(--kz-chrome,#fff); border:1px solid var(--kz-border,#E6E8EC); border-radius:14px; overflow:hidden; box-shadow:0 8px 24px rgba(0,0,0,.16);">
+        <div style="padding:10px 14px 6px; font-size:11px; font-weight:700; letter-spacing:.5px; text-transform:uppercase; color:var(--kz-muted,#5C6675);">Search with</div>
+        <sc-for list="{{ enginePicks }}" as="e" hint-placeholder-count="4">
+          <button onClick="{{ e.onSelect }}" style="width:100%; border:none; background:transparent; cursor:pointer; display:flex; align-items:center; gap:11px; padding:10px 14px; font-family:inherit;">
+            <div style="flex:none; width:26px; height:26px; border-radius:7px; background:{{ e.color }}; color:#fff; font-weight:700; font-size:12px; display:flex; align-items:center; justify-content:center;">{{ e.letter }}</div>
+            <span style="flex:1; text-align:left; font-size:14px; color:var(--kz-fg,#0D1B2A);">{{ e.name }}</span>
+            <sc-if value="{{ e.selected }}" hint-placeholder-val="{{ false }}">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--kz-accent,#0D1B2A)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+            </sc-if>
+          </button>
+        </sc-for>
+      </div>
+    </sc-if>
+
+    <!-- overflow menu -->
+    <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+      <div onClick="{{ closeMenu }}" style="position:absolute; inset:0; z-index:30;"></div>
+      <div style="position:absolute; z-index:31; right:12px; top:84px; width:254px; background:var(--kz-chrome,#fff); border:1px solid var(--kz-border,#E6E8EC); border-radius:16px; overflow:hidden; box-shadow:0 10px 30px rgba(0,0,0,.18);">
+        <!-- adblock toggle -->
+        <div style="display:flex; align-items:center; gap:12px; padding:13px 16px;">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="var(--kz-fg,#0D1B2A)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <span style="flex:1; font-size:14.5px; color:var(--kz-fg,#0D1B2A);">Ad blocker</span>
+          <button onClick="{{ toggleAdblock }}" style="flex:none; width:42px; height:25px; border:none; border-radius:13px; cursor:pointer; padding:0; position:relative; background:{{ adblockTrack }};">
+            <span style="position:absolute; top:3px; left:{{ adblockXsm }}; width:19px; height:19px; border-radius:50%; background:#fff;"></span>
+          </button>
+        </div>
+        <!-- desktop toggle -->
+        <div style="display:flex; align-items:center; gap:12px; padding:13px 16px;">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="var(--kz-fg,#0D1B2A)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+          <span style="flex:1; font-size:14.5px; color:var(--kz-fg,#0D1B2A);">Desktop mode</span>
+          <button onClick="{{ toggleDesktop }}" style="flex:none; width:42px; height:25px; border:none; border-radius:13px; cursor:pointer; padding:0; position:relative; background:{{ desktopTrack }};">
+            <span style="position:absolute; top:3px; left:{{ desktopXsm }}; width:19px; height:19px; border-radius:50%; background:#fff;"></span>
+          </button>
+        </div>
+        <button onClick="{{ share }}" style="width:100%; border:none; background:transparent; cursor:pointer; display:flex; align-items:center; gap:12px; padding:13px 16px; font-family:inherit;">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="var(--kz-fg,#0D1B2A)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>
+          <span style="flex:1; text-align:left; font-size:14.5px; color:var(--kz-fg,#0D1B2A);">Share page</span>
+        </button>
+        <button onClick="{{ translate }}" style="width:100%; border:none; background:transparent; cursor:pointer; display:flex; align-items:center; gap:12px; padding:13px 16px; font-family:inherit;">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="var(--kz-fg,#0D1B2A)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h7M9 3v2c0 4-2 7-6 8"/><path d="M5 9c0 3 3 5 6 6"/><path d="M13 21l4-9 4 9M14.5 18h5"/></svg>
+          <span style="flex:1; text-align:left; font-size:14.5px; color:var(--kz-fg,#0D1B2A);">Translate page</span>
+        </button>
+
+        <div style="height:1px; background:var(--kz-border,#E6E8EC); margin:4px 0;"></div>
+
+        <button onClick="{{ menuPrivate }}" style="width:100%; border:none; background:transparent; cursor:pointer; display:flex; align-items:center; gap:12px; padding:13px 16px; font-family:inherit;">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="var(--kz-accent,#0D1B2A)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7"/><path d="M3 3l18 18"/><circle cx="12" cy="12" r="3"/></svg>
+          <span style="flex:1; text-align:left; font-size:14.5px; color:var(--kz-accent,#0D1B2A);">{{ privateLabel }}</span>
+        </button>
+        <button onClick="{{ goHistory }}" style="width:100%; border:none; background:transparent; cursor:pointer; display:flex; align-items:center; gap:12px; padding:13px 16px; font-family:inherit;">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="var(--kz-fg,#0D1B2A)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 106 5.3L3 8"/><path d="M12 7v5l4 2"/></svg>
+          <span style="flex:1; text-align:left; font-size:14.5px; color:var(--kz-fg,#0D1B2A);">History</span>
+        </button>
+        <button onClick="{{ goDownloads }}" style="width:100%; border:none; background:transparent; cursor:pointer; display:flex; align-items:center; gap:12px; padding:13px 16px; font-family:inherit;">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="var(--kz-fg,#0D1B2A)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14"/></svg>
+          <span style="flex:1; text-align:left; font-size:14.5px; color:var(--kz-fg,#0D1B2A);">Downloads</span>
+        </button>
+        <button onClick="{{ goSettings }}" style="width:100%; border:none; background:transparent; cursor:pointer; display:flex; align-items:center; gap:12px; padding:13px 16px; font-family:inherit;">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="var(--kz-fg,#0D1B2A)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-2.92.68 2 2 0 11-3.96 0 1.65 1.65 0 00-2.92-.68l-.06.06a2 2 0 11-2.83-2.83l.06-.06A1.65 1.65 0 004.6 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+          <span style="flex:1; text-align:left; font-size:14.5px; color:var(--kz-fg,#0D1B2A);">Settings</span>
+        </button>
+      </div>
+    </sc-if>
+
+    <!-- TABS action row (tabs screen) -->
+    <sc-if value="{{ isTabs }}" hint-placeholder-val="{{ false }}">
+      <div style="position:absolute; left:50%; transform:translateX(-50%); bottom:74px; z-index:20; display:flex; gap:10px;">
+        <button onClick="{{ closeAll }}" style="height:46px; padding:0 22px; border:none; border-radius:23px; background:#D64545; color:#fff; font-size:14px; font-weight:500; font-family:inherit; cursor:pointer;">Close all</button>
+        <button onClick="{{ newTab }}" style="height:46px; padding:0 22px; border:none; border-radius:23px; background:{{ t.accent }}; color:{{ t.accentFg }}; font-size:14px; font-weight:500; font-family:inherit; cursor:pointer; display:flex; align-items:center; gap:7px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+          New tab
+        </button>
+      </div>
+    </sc-if>
+
+    <!-- toast -->
+    <sc-if value="{{ toast }}" hint-placeholder-val="{{ false }}">
+      <div style="position:absolute; z-index:40; left:50%; bottom:74px; transform:translateX(-50%); background:#0D1B2A; color:#fff; font-size:13px; font-weight:500; padding:11px 20px; border-radius:24px; white-space:nowrap; box-shadow:0 6px 20px rgba(0,0,0,.22);">{{ toast }}</div>
+    </sc-if>
+
+  </div>
+
+  <sc-if value="{{ showChrome }}" hint-placeholder-val="{{ true }}">
+  <!-- screen jump chips for review -->
+  <div style="width:384px; display:flex; flex-wrap:wrap; gap:7px; justify-content:center;">
+    <sc-for list="{{ chips }}" as="c" hint-placeholder-count="6">
+      <button onClick="{{ c.onClick }}" style="border:none; cursor:pointer; font-family:inherit; font-size:12px; font-weight:500; padding:6px 13px; border-radius:14px; background:{{ c.bg }}; color:{{ c.fg }};">{{ c.label }}</button>
+    </sc-for>
+  </div>
+  </sc-if>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;$preview&quot;: { &quot;width&quot;: 384, &quot;height&quot;: 940 },
+  &quot;bare&quot;: { &quot;editor&quot;: null, &quot;tsType&quot;: &quot;boolean&quot; },
+  &quot;initialScreen&quot;: { &quot;editor&quot;: null, &quot;tsType&quot;: &quot;string&quot; },
+  &quot;initialMode&quot;: { &quot;editor&quot;: null, &quot;tsType&quot;: &quot;string&quot; },
+  &quot;initialMenu&quot;: { &quot;editor&quot;: null, &quot;tsType&quot;: &quot;boolean&quot; },
+  &quot;initialEngine&quot;: { &quot;editor&quot;: null, &quot;tsType&quot;: &quot;boolean&quot; },
+  &quot;defaultEngine&quot;: { &quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;DuckDuckGo&quot;, &quot;Brave&quot;, &quot;Google&quot;, &quot;Bing&quot;], &quot;default&quot;: &quot;DuckDuckGo&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Defaults&quot;, &quot;label&quot;: &quot;Default search engine&quot; },
+  &quot;adblockDefault&quot;: { &quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Defaults&quot;, &quot;label&quot;: &quot;Ad blocker on by default&quot; }
+}">
+const THEMES = {
+  light:   { bg:'#FFFFFF', surface:'#F4F5F7', surface2:'#E9EBEF', fg:'#0D1B2A', muted:'#5C6675', faint:'#98A1AE', border:'#E6E8EC', accent:'#0D1B2A', accentFg:'#FFFFFF', chrome:'#FFFFFF', statusText:'#0D1B2A', track:'#D2D6DD' },
+  dark:    { bg:'#1E1E1E', surface:'#272727', surface2:'#333333', fg:'#FFFFFF', muted:'#A7A7A7', faint:'#6E6E6E', border:'#3A3A3A', accent:'#6E90C8', accentFg:'#10243C', chrome:'#1E1E1E', statusText:'#FFFFFF', track:'#3C3C3C' },
+  private: { bg:'#171221', surface:'#221A33', surface2:'#2D2342', fg:'#FFFFFF', muted:'#BCB0D6', faint:'#7E7298', border:'#352A4C', accent:'#9D7CE8', accentFg:'#1A1226', chrome:'#171221', statusText:'#EDE7F7', track:'#3A2F52' },
+};
+
+const ENGINES = [
+  { name:'DuckDuckGo', letter:'D', color:'#DE5833' },
+  { name:'Brave',      letter:'B', color:'#FB542B' },
+  { name:'Google',     letter:'G', color:'#4285F4' },
+  { name:'Bing',       letter:'b', color:'#0C8484' },
+];
+
+class Component extends DCLogic {
+  state = {
+    mode: 'light',
+    prevMode: 'light',
+    screen: 'home',
+    menuOpen: false,
+    enginePopover: false,
+    engine: 0,
+    adblock: true,
+    desktop: false,
+    toast: null,
+    refreshing: false,
+    swipeId: null,
+    swipeX: 0,
+    startX: 0,
+    tabs: [
+      { id:1, title:'Kaze — Start page', url:'kaze://start', fav:'K', color:'#0D1B2A' },
+      { id:2, title:'The case for fast browsers', url:'speed.blog', fav:'S', color:'#2E7D5B' },
+      { id:3, title:'Material Design 3 — Components', url:'m3.material.io', fav:'M', color:'#3B6FC4' },
+    ],
+    history: [
+      { label:'TODAY', items:[
+        { id:11, title:'Fast browsers and you', url:'speed.blog/fast', fav:'S', color:'#2E7D5B' },
+        { id:12, title:'Material Design 3', url:'m3.material.io', fav:'M', color:'#3B6FC4' },
+        { id:13, title:'DuckDuckGo', url:'duckduckgo.com', fav:'D', color:'#DE5833' },
+      ]},
+      { label:'YESTERDAY', items:[
+        { id:14, title:'Kotlin Coroutines guide', url:'kotlinlang.org/coroutines', fav:'K', color:'#7F52FF' },
+        { id:15, title:'Android 16 release notes', url:'developer.android.com', fav:'A', color:'#3DDC84' },
+      ]},
+      { label:'JUN 27', items:[
+        { id:16, title:'Minimalist UI inspiration', url:'dribbble.com/tags/minimal', fav:'U', color:'#EA4C89' },
+        { id:17, title:'WebView performance tips', url:'web.dev/webview', fav:'W', color:'#4285F4' },
+      ]},
+    ],
+    downloads: [
+      { name:'Annual-Report-2026.pdf', meta:'2.4 MB · Today, 14:02', ext:'PDF', color:'#D64545' },
+      { name:'kaze-wallpaper.jpg', meta:'860 KB · Today, 09:18', ext:'JPG', color:'#3B82C4' },
+      { name:'project-assets.zip', meta:'14.7 MB · Yesterday', ext:'ZIP', color:'#C99A2E' },
+      { name:'lofi-mix.mp3', meta:'5.1 MB · Jun 27', ext:'MP3', color:'#7A5AD6' },
+      { name:'invoice_0425.pdf', meta:'128 KB · Jun 26', ext:'PDF', color:'#D64545' },
+    ],
+  };
+
+  constructor(props){
+    super(props);
+    const p = props || {};
+    const truthy = (v) => v === true || v === 'true';
+    const im = p.initialMode || 'light';
+    const ei = ENGINES.findIndex(e => e.name === p.defaultEngine);
+    const ab = (p.adblockDefault === undefined || p.adblockDefault === null) ? true : truthy(p.adblockDefault);
+    this.state = {
+      ...this.state,
+      mode: im,
+      prevMode: im === 'private' ? 'light' : im,
+      screen: p.initialScreen || 'home',
+      menuOpen: truthy(p.initialMenu),
+      enginePopover: truthy(p.initialEngine),
+      engine: ei >= 0 ? ei : 0,
+      adblock: ab,
+    };
+  }
+
+  _toastTimer = null;
+  showToast(msg) {
+    clearTimeout(this._toastTimer);
+    this.setState({ toast: msg });
+    this._toastTimer = setTimeout(() => this.setState({ toast: null }), 1800);
+  }
+
+  setMode(m) {
+    if (m === 'private') return this.enterPrivate();
+    this.setState({ mode: m, prevMode: m });
+  }
+  enterPrivate() { this.setState(s => ({ prevMode: s.mode === 'private' ? s.prevMode : s.mode, mode:'private', menuOpen:false, screen:'home' })); }
+  exitPrivate() { this.setState(s => ({ mode: s.prevMode || 'light', menuOpen:false })); }
+
+  go(screen) { this.setState({ screen, menuOpen:false, enginePopover:false }); }
+
+  refresh() {
+    this.setState({ refreshing:true });
+    setTimeout(() => this.setState({ refreshing:false }), 650);
+  }
+
+  deleteHistory(id) {
+    this.setState(s => ({
+      history: s.history
+        .map(g => ({ ...g, items: g.items.filter(it => it.id !== id) }))
+        .filter(g => g.items.length > 0),
+      swipeId:null, swipeX:0,
+    }));
+  }
+
+  closeTab(id) { this.setState(s => ({ tabs: s.tabs.filter(t => t.id !== id) })); }
+  closeAll() { this.setState({ tabs: [] }); }
+  newTab() {
+    this.setState(s => ({
+      tabs: [...s.tabs, { id: Date.now(), title:'New tab', url:'kaze://start', fav:'K', color:'#0D1B2A' }].slice(0,4),
+      screen:'home',
+    }));
+  }
+
+  clearHistory() {
+    this.setState({ history: [] });
+    this.showToast('History cleared');
+  }
+
+  renderVals() {
+    const s = this.state;
+    const t = THEMES[s.mode];
+    const isPrivate = s.mode === 'private';
+    const isDark = s.mode !== 'light';
+
+    const segColor = (active) => ({ bg: active ? '#0D1B2A' : 'transparent', fg: active ? '#FFFFFF' : '#5C6675' });
+    const modes = [
+      { key:'light', label:'Light' },
+      { key:'dark', label:'Dark' },
+      { key:'private', label:'Private' },
+    ].map(m => ({ ...m, ...segColor(s.mode === m.key), onClick: () => this.setMode(m.key) }));
+
+    const engineCur = ENGINES[s.engine];
+    const engines = ENGINES.map((e, i) => ({
+      ...e,
+      selected: i === s.engine,
+      ringColor: i === s.engine ? t.accent : t.faint,
+      dotColor: i === s.engine ? t.accent : 'transparent',
+      onSelect: () => { this.setState({ engine:i }); this.showToast(e.name + ' set as default'); },
+    }));
+    const enginePicks = ENGINES.map((e, i) => ({
+      ...e,
+      selected: i === s.engine,
+      onSelect: () => this.setState({ engine:i, enginePopover:false }),
+    }));
+
+    const historyGroups = s.history.map(g => ({
+      label: g.label,
+      items: g.items.map(it => ({
+        ...it,
+        onDown: (e) => {
+          this._dragEl = e.currentTarget; this._dragId = it.id; this._startX = e.clientX; this._dx = 0;
+          this._dragEl.style.transition = 'none';
+          try { e.currentTarget.setPointerCapture(e.pointerId); } catch(_){}
+        },
+        onMove: (e) => {
+          if (this._dragId !== it.id || !this._dragEl) return;
+          let dx = e.clientX - this._startX;
+          if (dx > 0) dx = 0;
+          if (dx < -150) dx = -150;
+          this._dx = dx;
+          this._dragEl.style.transform = 'translateX(' + dx + 'px)';
+        },
+        onUp: (e) => {
+          if (this._dragId !== it.id) return;
+          const el = this._dragEl; const shouldDelete = this._dx < -90;
+          this._dragId = null; this._dragEl = null;
+          if (shouldDelete) { this.deleteHistory(it.id); }
+          else if (el) { el.style.transition = 'transform .2s ease'; el.style.transform = 'translateX(0px)'; }
+        },
+      })),
+    }));
+
+    const tabs = s.tabs.map(tab => ({
+      ...tab,
+      onOpen: () => this.go('home'),
+      onClose: (e) => { e.stopPropagation(); this.closeTab(tab.id); },
+    }));
+
+    const chipDef = [
+      { label:'Main', screen:'home' },
+      { label:'Menu', action:'menu' },
+      { label:'Tabs', screen:'tabs' },
+      { label:'Settings', screen:'settings' },
+      { label:'History', screen:'history' },
+      { label:'Downloads', screen:'downloads' },
+    ];
+    const chips = chipDef.map(c => {
+      const active = c.screen ? s.screen === c.screen && !s.menuOpen : (c.action === 'menu' && s.menuOpen);
+      return {
+        label: c.label,
+        bg: active ? '#0D1B2A' : '#DCDFE4',
+        fg: active ? '#FFFFFF' : '#3A4452',
+        onClick: () => c.action === 'menu' ? this.setState({ screen:'home', menuOpen:true }) : this.go(c.screen),
+      };
+    });
+
+    const bare = this.props.bare === true || this.props.bare === 'true';
+    return {
+      t,
+      isPrivate, isDark,
+      bare,
+      showChrome: !bare,
+      stageBg: bare ? 'transparent' : '#E8EAEE',
+      stagePad: bare ? '0px' : '36px 20px 56px',
+      stageGap: bare ? '0px' : '22px',
+      stageMinH: bare ? '0px' : '100vh',
+      isHome: s.screen === 'home',
+      isTabs: s.screen === 'tabs',
+      isSettings: s.screen === 'settings',
+      isHistory: s.screen === 'history',
+      isDownloads: s.screen === 'downloads',
+      isSub: s.screen !== 'home',
+      subTitle: { tabs:'Tabs', settings:'Settings', history:'History', downloads:'Downloads' }[s.screen] || '',
+
+      modes, chips,
+      engineCur, engines, enginePicks,
+      enginePopover: s.enginePopover,
+      toggleEnginePopover: () => this.setState(st => ({ enginePopover: !st.enginePopover })),
+      closeEnginePopover: () => this.setState({ enginePopover:false }),
+
+      menuOpen: s.menuOpen,
+      openMenu: () => this.setState({ menuOpen:true }),
+      closeMenu: () => this.setState({ menuOpen:false }),
+
+      adblock: s.adblock,
+      adblockTrack: s.adblock ? t.accent : t.track,
+      adblockX: s.adblock ? '22px' : '3px',
+      adblockXsm: s.adblock ? '20px' : '3px',
+      desktop: s.desktop,
+      desktopTrack: s.desktop ? t.accent : t.track,
+      desktopXsm: s.desktop ? '20px' : '3px',
+      toggleAdblock: () => { this.setState(st => ({ adblock: !st.adblock })); },
+      toggleDesktop: () => { this.setState(st => ({ desktop: !st.desktop })); },
+
+      darkTrack: (isDark && !isPrivate) ? t.accent : t.track,
+      darkX: (isDark && !isPrivate) ? '22px' : '3px',
+      toggleDark: () => this.setMode(this.state.mode === 'dark' ? 'light' : 'dark'),
+
+      goHome: () => this.go('home'),
+      goTabs: () => this.go('tabs'),
+      goSettings: () => this.go('settings'),
+      goHistory: () => this.go('history'),
+      goDownloads: () => this.go('downloads'),
+
+      navBack: () => this.showToast('Nothing to go back to'),
+      navFwd: () => this.showToast('Nothing forward'),
+      refresh: () => this.refresh(),
+      refreshAnim: s.refreshing ? 'kzspin .65s linear' : 'none',
+
+      share: () => { this.setState({ menuOpen:false }); this.showToast('Share sheet opened'); },
+      translate: () => { this.setState({ menuOpen:false }); this.showToast('Page translated'); },
+
+      privateLabel: isPrivate ? 'Close private tabs' : 'New private tab',
+      menuPrivate: () => isPrivate ? this.exitPrivate() : this.enterPrivate(),
+
+      tabs,
+      tabCount: s.tabs.length,
+      hasTabs: s.tabs.length > 0,
+      noTabs: s.tabs.length === 0,
+      closeAll: () => this.closeAll(),
+      newTab: () => this.newTab(),
+
+      historyGroups,
+      clearHistory: () => this.clearHistory(),
+      shortcuts: [
+        { letter:'S', label:'speed.blog', color:'#2E7D5B' },
+        { letter:'M', label:'material', color:'#3B6FC4' },
+        { letter:'K', label:'kotlin', color:'#7F52FF' },
+        { letter:'D', label:'duck', color:'#DE5833' },
+      ],
+      downloads: s.downloads,
+      toast: s.toast,
+    };
+  }
+}
+</script>
+</body>
+</html>

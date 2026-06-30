@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Video: frame with a play triangle. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp" android:height="24dp" android:viewportWidth="24" android:viewportHeight="24">
+    <path android:strokeColor="#000000" android:strokeWidth="1.8" android:strokeLineCap="round" android:strokeLineJoin="round"
+        android:fillColor="#00000000" android:pathData="M3,5 L21,5 L21,19 L3,19 Z" />
+    <path android:fillColor="#000000" android:pathData="M10,9 L16,12 L10,15 Z" />
+</vector>

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  body{ margin:0; }
+</style>
+</helmet>
+
+<div style="min-height:100vh; background:#EEF0F3; padding:54px 44px 90px; box-sizing:border-box; font-family:Roboto, system-ui, sans-serif; display:flex; flex-direction:column; align-items:center; gap:14px;">
+
+  <!-- title block -->
+  <div style="width:100%; max-width:880px; display:flex; align-items:flex-end; justify-content:space-between; padding-bottom:6px;">
+    <div style="display:flex; align-items:center; gap:13px;">
+      <div style="color:#0D1B2A;">
+        <svg viewBox="0 0 100 100" width="34" height="34" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round"><circle cx="50" cy="50" r="40"/><path d="M28 60 Q50 40 80 50"/><path d="M33 70 Q52 56 74 62"/></svg>
+      </div>
+      <div>
+        <div style="font-size:26px; font-weight:500; letter-spacing:-0.6px; color:#0D1B2A; line-height:1;">Kaze</div>
+        <div style="font-size:13px; color:#5C6675; margin-top:5px;">Minimal Android browser · every screen, light &amp; dark</div>
+      </div>
+    </div>
+    <div style="display:flex; align-items:center; gap:18px;">
+      <div style="display:flex; align-items:center; gap:7px;"><span style="width:13px; height:13px; border-radius:4px; background:#FFFFFF; border:1px solid #D4D8DF;"></span><span style="font-size:12px; color:#5C6675;">Light</span></div>
+      <div style="display:flex; align-items:center; gap:7px;"><span style="width:13px; height:13px; border-radius:4px; background:#1E1E1E;"></span><span style="font-size:12px; color:#5C6675;">Dark</span></div>
+      <div style="display:flex; align-items:center; gap:7px;"><span style="width:13px; height:13px; border-radius:4px; background:#171221;"></span><span style="font-size:12px; color:#5C6675;">Private</span></div>
+    </div>
+  </div>
+
+  <div style="width:100%; max-width:880px; height:1px; background:#DCDFE4; margin-bottom:26px;"></div>
+
+  <!-- MAIN -->
+  <section data-screen-label="Main" style="width:100%; max-width:880px; display:flex; flex-direction:column; gap:20px; margin-bottom:8px;">
+    <div style="display:flex; align-items:baseline; gap:12px;">
+      <span style="font-size:13px; font-weight:700; color:#0D1B2A; letter-spacing:.5px;">01</span>
+      <span style="font-size:18px; font-weight:500; color:#0D1B2A;">Main screen</span>
+      <span style="font-size:13px; color:#8A93A0;">Centered address bar · engine switcher · bottom nav · tab count</span>
+    </div>
+    <div style="display:flex; gap:48px; justify-content:center;">
+      <div style="display:flex; flex-direction:column; align-items:center; gap:13px;">
+        <dc-import name="Kaze Browser" bare="true" initial-mode="light" initial-screen="home" hint-size="384px,792px" style="width:384px; height:792px;"></dc-import>
+        <span style="font-size:12.5px; font-weight:500; color:#5C6675; letter-spacing:.3px;">Light</span>
+      </div>
+      <div style="display:flex; flex-direction:column; align-items:center; gap:13px;">
+        <dc-import name="Kaze Browser" bare="true" initial-mode="dark" initial-screen="home" hint-size="384px,792px" style="width:384px; height:792px;"></dc-import>
+        <span style="font-size:12.5px; font-weight:500; color:#5C6675; letter-spacing:.3px;">Dark</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- OVERFLOW MENU -->
+  <section data-screen-label="Overflow menu" style="width:100%; max-width:880px; display:flex; flex-direction:column; gap:20px; margin-bottom:8px;">
+    <div style="display:flex; align-items:baseline; gap:12px;">
+      <span style="font-size:13px; font-weight:700; color:#0D1B2A; letter-spacing:.5px;">02</span>
+      <span style="font-size:18px; font-weight:500; color:#0D1B2A;">Overflow menu</span>
+      <span style="font-size:13px; color:#8A93A0;">Ad blocker · desktop mode · share · translate</span>
+    </div>
+    <div style="display:flex; gap:48px; justify-content:center;">
+      <div style="display:flex; flex-direction:column; align-items:center; gap:13px;">
+        <dc-import name="Kaze Browser" bare="true" initial-mode="light" initial-screen="home" initial-menu="true" hint-size="384px,792px" style="width:384px; height:792px;"></dc-import>
+        <span style="font-size:12.5px; font-weight:500; color:#5C6675; letter-spacing:.3px;">Light</span>
+      </div>
+      <div style="display:flex; flex-direction:column; align-items:center; gap:13px;">
+        <dc-import name="Kaze Browser" bare="true" initial-mode="dark" initial-screen="home" initial-menu="true" hint-size="384px,792px" style="width:384px; height:792px;"></dc-import>
+        <span style="font-size:12.5px; font-weight:500; color:#5C6675; letter-spacing:.3px;">Dark</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- TAB SWITCHER -->
+  <section data-screen-label="Tab switcher" style="width:100%; max-width:880px; display:flex; flex-direction:column; gap:20px; margin-bottom:8px;">
+    <div style="display:flex; align-items:baseline; gap:12px;">
+      <span style="font-size:13px; font-weight:700; color:#0D1B2A; letter-spacing:.5px;">03</span>
+      <span style="font-size:18px; font-weight:500; color:#0D1B2A;">Tab switcher</span>
+      <span style="font-size:13px; color:#8A93A0;">Up to 4 cards · close all · new tab</span>
+    </div>
+    <div style="display:flex; gap:48px; justify-content:center;">
+      <div style="display:flex; flex-direction:column; align-items:center; gap:13px;">
+        <dc-import name="Kaze Browser" bare="true" initial-mode="light" initial-screen="tabs" hint-size="384px,792px" style="width:384px; height:792px;"></dc-import>
+        <span style="font-size:12.5px; font-weight:500; color:#5C6675; letter-spacing:.3px;">Light</span>
+      </div>
+      <div style="display:flex; flex-direction:column; align-items:center; gap:13px;">
+        <dc-import name="Kaze Browser" bare="true" initial-mode="dark" initial-screen="tabs" hint-size="384px,792px" style="width:384px; height:792px;"></dc-import>
+        <span style="font-size:12.5px; font-weight:500; color:#5C6675; letter-spacing:.3px;">Dark</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- SETTINGS -->
+  <section data-screen-label="Settings" style="width:100%; max-width:880px; display:flex; flex-direction:column; gap:20px; margin-bottom:8px;">
+    <div style="display:flex; align-items:baseline; gap:12px;">
+      <span style="font-size:13px; font-weight:700; color:#0D1B2A; letter-spacing:.5px;">04</span>
+      <span style="font-size:18px; font-weight:500; color:#0D1B2A;">Settings</span>
+      <span style="font-size:13px; color:#8A93A0;">Engine picker · ad blocker · dark mode · clear history</span>
+    </div>
+    <div style="display:flex; gap:48px; justify-content:center;">
+      <div style="display:flex; flex-direction:column; align-items:center; gap:13px;">
+        <dc-import name="Kaze Browser" bare="true" initial-mode="light" initial-screen="settings" hint-size="384px,792px" style="width:384px; height:792px;"></dc-import>
+        <span style="font-size:12.5px; font-weight:500; color:#5C6675; letter-spacing:.3px;">Light</span>
+      </div>
+      <div style="display:flex; flex-direction:column; align-items:center; gap:13px;">
+        <dc-import name="Kaze Browser" bare="true" initial-mode="dark" initial-screen="settings" hint-size="384px,792px" style="width:384px; height:792px;"></dc-import>
+        <span style="font-size:12.5px; font-weight:500; color:#5C6675; letter-spacing:.3px;">Dark</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- HISTORY -->
+  <section data-screen-label="History" style="width:100%; max-width:880px; display:flex; flex-direction:column; gap:20px; margin-bottom:8px;">
+    <div style="display:flex; align-items:baseline; gap:12px;">
+      <span style="font-size:13px; font-weight:700; color:#0D1B2A; letter-spacing:.5px;">05</span>
+      <span style="font-size:18px; font-weight:500; color:#0D1B2A;">History</span>
+      <span style="font-size:13px; color:#8A93A0;">Date-grouped · title + URL · swipe to delete</span>
+    </div>
+    <div style="display:flex; gap:48px; justify-content:center;">
+      <div style="display:flex; flex-direction:column; align-items:center; gap:13px;">
+        <dc-import name="Kaze Browser" bare="true" initial-mode="light" initial-screen="history" hint-size="384px,792px" style="width:384px; height:792px;"></dc-import>
+        <span style="font-size:12.5px; font-weight:500; color:#5C6675; letter-spacing:.3px;">Light</span>
+      </div>
+      <div style="display:flex; flex-direction:column; align-items:center; gap:13px;">
+        <dc-import name="Kaze Browser" bare="true" initial-mode="dark" initial-screen="history" hint-size="384px,792px" style="width:384px; height:792px;"></dc-import>
+        <span style="font-size:12.5px; font-weight:500; color:#5C6675; letter-spacing:.3px;">Dark</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- DOWNLOADS -->
+  <section data-screen-label="Downloads" style="width:100%; max-width:880px; display:flex; flex-direction:column; gap:20px; margin-bottom:8px;">
+    <div style="display:flex; align-items:baseline; gap:12px;">
+      <span style="font-size:13px; font-weight:700; color:#0D1B2A; letter-spacing:.5px;">06</span>
+      <span style="font-size:18px; font-weight:500; color:#0D1B2A;">Downloads</span>
+      <span style="font-size:13px; color:#8A93A0;">File name · size · date</span>
+    </div>
+    <div style="display:flex; gap:48px; justify-content:center;">
+      <div style="display:flex; flex-direction:column; align-items:center; gap:13px;">
+        <dc-import name="Kaze Browser" bare="true" initial-mode="light" initial-screen="downloads" hint-size="384px,792px" style="width:384px; height:792px;"></dc-import>
+        <span style="font-size:12.5px; font-weight:500; color:#5C6675; letter-spacing:.3px;">Light</span>
+      </div>
+      <div style="display:flex; flex-direction:column; align-items:center; gap:13px;">
+        <dc-import name="Kaze Browser" bare="true" initial-mode="dark" initial-screen="downloads" hint-size="384px,792px" style="width:384px; height:792px;"></dc-import>
+        <span style="font-size:12.5px; font-weight:500; color:#5C6675; letter-spacing:.3px;">Dark</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRIVATE -->
+  <section data-screen-label="Private mode" style="width:100%; max-width:880px; display:flex; flex-direction:column; gap:20px;">
+    <div style="display:flex; align-items:baseline; gap:12px;">
+      <span style="font-size:13px; font-weight:700; color:#9D7CE8; letter-spacing:.5px;">07</span>
+      <span style="font-size:18px; font-weight:500; color:#0D1B2A;">Private mode</span>
+      <span style="font-size:13px; color:#8A93A0;">Purple-tinted surface · persistent badge so you always know</span>
+    </div>
+    <div style="display:flex; gap:48px; justify-content:center;">
+      <div style="display:flex; flex-direction:column; align-items:center; gap:13px;">
+        <dc-import name="Kaze Browser" bare="true" initial-mode="private" initial-screen="home" hint-size="384px,792px" style="width:384px; height:792px;"></dc-import>
+        <span style="font-size:12.5px; font-weight:500; color:#7A5AD6; letter-spacing:.3px;">Private · Main</span>
+      </div>
+      <div style="display:flex; flex-direction:column; align-items:center; gap:13px;">
+        <dc-import name="Kaze Browser" bare="true" initial-mode="private" initial-screen="home" initial-menu="true" hint-size="384px,792px" style="width:384px; height:792px;"></dc-import>
+        <span style="font-size:12.5px; font-weight:500; color:#7A5AD6; letter-spacing:.3px;">Private · Menu</span>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+</x-dc>
+</body>
+</html>
