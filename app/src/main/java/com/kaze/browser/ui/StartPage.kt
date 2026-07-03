@@ -29,6 +29,10 @@ private val SHORTCUTS = listOf(
     Shortcut("W", "Wikipedia", "https://wikipedia.org", 0xFF3366CC),
     Shortcut("G", "GitHub", "https://github.com", 0xFF24292E),
     Shortcut("Y", "YouTube", "https://youtube.com", 0xFFFF0000),
+    Shortcut("R", "Reddit", "https://reddit.com", 0xFFFF4500),
+    Shortcut("T", "Twitter", "https://twitter.com", 0xFF1DA1F2),
+    Shortcut("S", "Stack Overflow", "https://stackoverflow.com", 0xFFF48024),
+    Shortcut("L", "LinkedIn", "https://linkedin.com", 0xFF0077B5),
 )
 
 @Composable
@@ -44,8 +48,37 @@ fun StartPage(onOpen: (String) -> Unit, modifier: Modifier = Modifier) {
         Text("kaze", color = colors.fg, fontSize = 30.sp, fontWeight = FontWeight.Light)
 
         Spacer(Modifier.height(40.dp))
+        
+        // Top 4 shortcuts
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
-            SHORTCUTS.forEach { s ->
+            SHORTCUTS.take(4).forEach { s ->
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    LetterBadge(
+                        letter = s.letter,
+                        color = Color(s.color),
+                        size = 50.dp,
+                        corner = 16.dp,
+                        fontSize = 19.sp,
+                        modifier = Modifier.clickable { onOpen(s.url) },
+                    )
+                    Spacer(Modifier.height(7.dp))
+                    Text(
+                        s.label,
+                        color = colors.muted,
+                        fontSize = 11.sp,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.width(64.dp),
+                    )
+                }
+            }
+        }
+        
+        Spacer(Modifier.height(24.dp))
+        
+        // Bottom 4 shortcuts
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
+            SHORTCUTS.drop(4).take(4).forEach { s ->
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     LetterBadge(
                         letter = s.letter,

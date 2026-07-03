@@ -15,7 +15,9 @@ enum class SearchEngine(
     DUCKDUCKGO("DuckDuckGo", "D", 0xFFDE5833, "https://duckduckgo.com/?q=%s"),
     BRAVE("Brave", "B", 0xFFFB542B, "https://search.brave.com/search?q=%s"),
     GOOGLE("Google", "G", 0xFF4285F4, "https://www.google.com/search?q=%s"),
-    BING("Bing", "b", 0xFF0C8484, "https://www.bing.com/search?q=%s");
+    ECOIA("Ecosia", "E", 0xFF00A550, "https://www.ecosia.org/search?q=%s"),
+    START_PAGE("Startpage", "S", 0xFF008060, "https://www.startpage.com/do/dsearch?query=%s"),
+    QWANT("Qwant", "Q", 0xFF0066CC, "https://www.qwant.com/?q=%s");
 
     fun searchUrl(query: String): String =
         queryTemplate.replace("%s", URLEncoder.encode(query, "UTF-8"))

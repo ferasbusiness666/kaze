@@ -31,6 +31,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -112,6 +113,7 @@ private fun AddressBar(vm: BrowserViewModel, modifier: Modifier = Modifier) {
     val colors = KazeTheme.colors
     val active = vm.activeTab
     val focus = LocalFocusManager.current
+    val keyboardController = LocalSoftwareKeyboardController.current
     // Reset the field whenever the active tab or its URL changes (e.g. after a load).
     var text by remember(active?.id, active?.url) { mutableStateOf(active?.url ?: "") }
 
@@ -126,6 +128,7 @@ private fun AddressBar(vm: BrowserViewModel, modifier: Modifier = Modifier) {
         keyboardActions = KeyboardActions(onGo = {
             if (text.isNotBlank()) vm.navigateTo(text)
             focus.clearFocus()
+            keyboardController?.hide()
         }),
         decorationBox = { inner ->
             Row(

@@ -55,7 +55,18 @@ fun buildWebView(context: Context, vm: BrowserViewModel, tab: BrowserTab): WebVi
             setSupportMultipleWindows(false)
             cacheMode = if (tab.isPrivate) WebSettings.LOAD_NO_CACHE else WebSettings.LOAD_DEFAULT
             userAgentString = if (vm.desktopMode) DESKTOP_UA else userAgentString
+            
+            // Performance optimizations
+            setAppCacheEnabled(!tab.isPrivate) // Disable app cache in private mode
+            setDatabaseEnabled(!tab.isPrivate) // Disable database in private mode
         }
+
+        // Enable hardware acceleration for better performance
+        setLayerType(View.LAYER_TYPE_HARDWARE, null)
+        
+        // Optimize for performance
+        isVerticalScrollBarEnabled = false
+        isHorizontalScrollBarEnabled = false
 
         CookieManager.getInstance().setAcceptThirdPartyCookies(this, !tab.isPrivate)
 
