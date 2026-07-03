@@ -189,7 +189,7 @@ class BrowserViewModel(app: Application) : AndroidViewModel(app) {
         prefs.adBlock = adBlockEnabled
     }
 
-    fun setEngine(e: SearchEngine) {
+    fun updateEngine(e: SearchEngine) {
         engine = e
         prefs.engine = e
     }
