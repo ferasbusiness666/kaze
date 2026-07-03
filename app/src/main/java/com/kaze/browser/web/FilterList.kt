@@ -7,17 +7,17 @@ import android.net.Uri
  * that make up the vast majority of network filters:
  *
  *   ||doubleclick.net^        -> block that domain and all subdomains
- *   ||ads.example.com^$script -> options after `$` are ignored, domain still blocked
+ *   ||ads.example.com^$script -> options after $ are ignored, domain still blocked
  *   @@||good.example.com^     -> exception (never block)
- *   ! comment / [Adblock...]  -> ignored
+ *   ! comment                 -> ignored
  *   ##.cssSelector            -> element-hiding, ignored (we only block network requests)
  *
  * Matching is host-suffix based and allocation-free per request, so it's cheap to
  * call from shouldInterceptRequest on the network thread.
  *
  * ponytail: host-level blocklist, not a full EasyList engine (no regex/option
- * semantics). Upgrade path: ship the real EasyList and extend [parseLine] to honour
- * `$` options and generic URL patterns.
+ * semantics). Upgrade path: ship the real EasyList and extend parseLine to honour
+ * $ options and generic URL patterns.
  */
 class FilterList private constructor(
     private val blocked: Set<String>,
