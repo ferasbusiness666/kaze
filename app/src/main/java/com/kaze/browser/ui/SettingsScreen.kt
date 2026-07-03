@@ -49,7 +49,7 @@ fun SettingsScreen(vm: BrowserViewModel) {
                     selected = engine == vm.engine,
                     colors = colors,
                     onSelect = {
-                        vm.setEngine(engine)
+                        vm.updateEngine(engine)
                         vm.showToast("${engine.displayName} set as default")
                     },
                 )
