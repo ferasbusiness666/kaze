@@ -132,7 +132,7 @@ fun EnginePopover(vm: BrowserViewModel) {
                 SearchEngine.entries.forEach { engine ->
                     Row(
                         Modifier.fillMaxWidth().clickable {
-                            vm.setEngine(engine)
+                            vm.updateEngine(engine)
                             vm.enginePopoverOpen = false
                         }.padding(horizontal = 14.dp, vertical = 10.dp),
                         verticalAlignment = Alignment.CenterVertically,
